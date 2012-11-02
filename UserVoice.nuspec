@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package >
+  <metadata>
+    <id>UserVoice</id>
+    <version>0.0.1</version>
+    <authors>Raimo Tuisku</authors>
+    <owners>UserVoice</owners>
+    <licenseUrl>http://github.com/uservoice/uservoice-csharp/MIT-LICENCE</licenseUrl>
+    <projectUrl>http://github.com/uservoice/uservoice-csharp</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>C# library for UserVoice API Connections</description>
+    <releaseNotes>Initial version</releaseNotes>
+    <copyright>Copyright 2012</copyright>
+    <tags>UserVoice SSO API</tags>
+    <dependencies>
+      <dependency id="Newtonsoft.Json" version="4.5.10" />
+      <dependency id="RestSharp" version="104.1" />
+    </dependencies>
+  </metadata>
+  <files />
+</package>
