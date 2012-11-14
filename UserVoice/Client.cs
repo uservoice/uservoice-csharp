@@ -52,7 +52,7 @@ namespace UserVoice
             try {
                 result = JObject.Parse(response.Content);
             } catch (Newtonsoft.Json.JsonReaderException) {
-                /* Got something else than JSON */
+                /* Got something else than JSON, likely 404 */
             }
 
             if (!HttpStatusCode.OK.Equals(response.StatusCode)) {
