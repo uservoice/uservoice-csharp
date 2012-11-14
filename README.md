@@ -1,4 +1,13 @@
-uservoice-csharp
-================
+UserVoice C# library for API connections
+========================================
 
-UserVoice C# library
+This library allows you to easily:
+* Do 3-legged and 2-legged UserVoice API calls safely without having to worry about the cryptographic details.
+
+Installation
+============
+
+```sh
+git clone https://github.com/uservoice/uservoice-csharp
+nuget install packages.config
+```
