@@ -17,21 +17,27 @@ namespace UserVoice
     class NotFound: APIError { public NotFound(string msg): base(msg) {} }
     class ApplicationError: APIError { public ApplicationError(string msg): base(msg) {} }
 
-    class Client
+    public class Client
     {
         private RestClient AccessToken;
         private string SubdomainName;
         private string ApiKey;
         private string ApiSecret;
         private string UservoiceDomain;
+        private string Callback;
         private string Protocol;
+        public string Token;
+        public string Secret;
 
-        public Client(string subdomainName, string apiKey, string apiSecret, string accessToken="", string accessTokenSecret="", string uservoiceDomain="uservoice.com", string protocol="https") {
+        public Client(string subdomainName, string apiKey, string apiSecret, string callback=null, string accessToken="", string accessTokenSecret="", string uservoiceDomain="uservoice.com", string protocol="https") {
             SubdomainName= subdomainName;
             ApiKey = apiKey;
             ApiSecret = apiSecret;
             UservoiceDomain = uservoiceDomain;
             Protocol = protocol;
+            Callback = callback;
+            Token = accessToken;
+            Secret = accessTokenSecret;
             AccessToken = new RestClient(protocol + "://" + subdomainName + "." + uservoiceDomain);
 
             if (accessToken == "" && accessTokenSecret == "") {
@@ -46,13 +52,16 @@ namespace UserVoice
             if (body != null) {
                 request.AddParameter("application/json", body, ParameterType.RequestBody);
             }
+            request.AddHeader("Accept", "application/json");
             var response = AccessToken.Execute(request);
 
             JToken result = null;
             try {
-                result = JObject.Parse(response.Content);
+                if (response.ContentType.StartsWith("application/json")) {
+                    result = JObject.Parse(response.Content);
+                }
             } catch (Newtonsoft.Json.JsonReaderException) {
-                /* Got something else than JSON, likely 404 */
+                throw new ApplicationError("Invalid JSON received: " + response.Content);
             }
 
             if (!HttpStatusCode.OK.Equals(response.StatusCode)) {
@@ -71,17 +80,35 @@ namespace UserVoice
             return result;
         }
         public Client LoginWithAccessToken(string token, string secret) {
-            return new Client(SubdomainName, ApiKey, ApiSecret, token, secret, UservoiceDomain, Protocol);
+            return new Client(SubdomainName, ApiKey, ApiSecret, Callback, token, secret, UservoiceDomain, Protocol);
+        }
+        public Client RequestToken(string callback = null) {
+            JObject parameters = new JObject();
+            if (Callback != null) {
+                parameters["oauth_callback"] = Callback;
+            } else if (callback != null) {
+                parameters["oauth_callback"] = callback;
+            } else {
+                parameters = null;
+            }
+            JToken result = Request(Method.POST, "/api/v1/oauth/request_token", parameters);
+            if (null == result || null == result["token"] || null == result["token"]["oauth_token"]) {
+                throw new Unauthorized("Failed to get request token");
+            }
+            return LoginWithAccessToken((string)result["token"]["oauth_token"], (string)result["token"]["oauth_token_secret"]);
         }
         public Client LoginAs(string email) {
             JObject parameters = new JObject();
             parameters["user"] = new JObject();
             parameters["user"]["email"] = email;
-            JToken result = Request(Method.POST, "/api/v1/users/login_as.json", parameters);
+            parameters["request_token"] = RequestToken().Token;
+            JToken result = Request(Method.POST, "/api/v1/users/login_as", parameters);
             return LoginWithAccessToken((string)result["token"]["oauth_token"], (string)result["token"]["oauth_token_secret"]);
         }
         public Client LoginAsOwner() {
-            JToken result = Request(Method.POST, "/api/v1/users/login_as_owner.json");
+            JObject parameters = new JObject();
+            parameters["request_token"] = RequestToken().Token;
+            JToken result = Request(Method.POST, "/api/v1/users/login_as_owner", parameters);
             return LoginWithAccessToken((string)result["token"]["oauth_token"], (string)result["token"]["oauth_token_secret"]);
         }
 
