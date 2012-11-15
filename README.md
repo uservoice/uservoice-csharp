@@ -7,7 +7,8 @@ This library allows you to easily:
 Installation
 ============
 
+Development:
 ```sh
 git clone https://github.com/uservoice/uservoice-csharp
-nuget install packages.config
+make
 ```
