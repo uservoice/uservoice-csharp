@@ -10,5 +10,6 @@ Installation
 Development:
 ```sh
 git clone https://github.com/uservoice/uservoice-csharp
+cd uservoice-csharp
 make
 ```
