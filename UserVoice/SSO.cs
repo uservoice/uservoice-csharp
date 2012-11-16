@@ -19,7 +19,6 @@ namespace UserVoice {
             byte[] keyBytes = new byte[16];
             Array.Copy(keyBytesLong, keyBytes, 16);
 
-            Console.WriteLine(userAttributes.ToString());
             byte[] textBytes = Encoding.UTF8.GetBytes(userAttributes.ToString());
             for (int i = 0; i < 16; i++) {
                 textBytes[i] ^= initVectorBytes[i];
