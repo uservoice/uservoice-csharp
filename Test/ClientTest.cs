@@ -26,7 +26,6 @@ namespace Test
             UserVoice.Client client = new UserVoice.Client(Config["subdomain_name"], Config["api_key"], Config["api_secret"]);
             UserVoice.Client userToken = client.LoginAs(email);
 
-            ;
             UserVoice.Client copiedToken = new UserVoice.Client(Config["subdomain_name"], Config["api_key"], Config["api_secret"])
                 .LoginWithAccessToken(userToken.Token, userToken.Secret);
             AssertEqual((string)copiedToken.Get("/api/v1/users/current")["user"]["email"], email);
