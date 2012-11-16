@@ -79,5 +79,10 @@ namespace Test
                 Console.WriteLine(one + "==" + two + " failed in " + new StackFrame(1, true).GetMethod().ToString());
             }
         }
+        public static void Main() {
+            new ClientTest();
+            new SSOTest();
+            System.Console.WriteLine("Assertions failed: " + Test.AssertionsFailed() + " / " + Test.AssertionsTotal());
+        }
     }
 }
