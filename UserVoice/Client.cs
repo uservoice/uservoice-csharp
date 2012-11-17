@@ -47,10 +47,10 @@ namespace UserVoice
             }
         }
 
-        public JToken Request(Method method, string path, JToken body=null) {
+        public JToken Request(Method method, string path, Object body=null) {
             var request = new RestRequest(path, method);
             if (body != null) {
-                request.AddParameter("application/json", body, ParameterType.RequestBody);
+                request.AddParameter("application/json", JsonConvert.SerializeObject(body), ParameterType.RequestBody);
             }
             request.AddHeader("Accept", "application/json");
             var response = AccessToken.Execute(request);
@@ -114,7 +114,7 @@ namespace UserVoice
 
         public JToken Get(string path) { return Request(Method.GET, path); }
         public JToken Delete(string path) { return Request(Method.DELETE, path); }
-        public JToken Post(string path, JToken parameters) { return Request(Method.POST, path, parameters); }
-        public JToken Put(string path, JToken parameters) { return Request(Method.PUT, path, parameters); }
+        public JToken Post(string path, Object parameters) { return Request(Method.POST, path, parameters); }
+        public JToken Put(string path, Object parameters) { return Request(Method.PUT, path, parameters); }
     }
 }

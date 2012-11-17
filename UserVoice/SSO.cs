@@ -8,7 +8,7 @@ using Newtonsoft.Json.Linq;
 
 namespace UserVoice {
     public class SSO {
-        public static string GenerateToken(string subdomainName, string ssoKey, JToken userAttributes) { 
+        public static string GenerateToken(string subdomainName, string ssoKey, Object userAttributes) {
             string initVector = "OpenSSL for Ruby"; // DO NOT CHANGE
 
             byte[] initVectorBytes = Encoding.UTF8.GetBytes(initVector);
@@ -19,14 +19,14 @@ namespace UserVoice {
             byte[] keyBytes = new byte[16];
             Array.Copy(keyBytesLong, keyBytes, 16);
 
-            byte[] textBytes = Encoding.UTF8.GetBytes(userAttributes.ToString());
+            byte[] textBytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(userAttributes));
             for (int i = 0; i < 16; i++) {
                 textBytes[i] ^= initVectorBytes[i];
             }
 
             // Encrypt the string to an array of bytes
             byte[] encrypted = EncryptStringToBytesWithAES(textBytes, keyBytes, initVectorBytes);
-            string encoded = Convert.ToBase64String(encrypted);   
+            string encoded = Convert.ToBase64String(encrypted);
             return HttpUtility.UrlEncode(encoded);
         }
 
@@ -53,10 +53,10 @@ namespace UserVoice {
                         csEncrypt.FlushFinalBlock();
                     }
 
-                    byte[] encrypted = msEncrypt.ToArray(); 
+                    byte[] encrypted = msEncrypt.ToArray();
                     // Return the encrypted bytes from the memory stream.
                     return encrypted;
                 }
-        }   
+        }
     }
 }

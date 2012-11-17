@@ -19,7 +19,6 @@ namespace Test
                 }
             }
         }
-        private NameValueCollection config;
         private static int assertionsFailed = 0;
         private static int assertionsTotal = 0;
         public static int AssertionsFailed() {
@@ -28,7 +27,8 @@ namespace Test
         public static int AssertionsTotal() {
             return assertionsTotal;
         }
-        protected NameValueCollection Config {
+        private static NameValueCollection config;
+        protected static NameValueCollection Config {
             get {
                 if (config == null)  {
                     string line;
