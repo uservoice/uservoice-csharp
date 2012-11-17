@@ -55,16 +55,17 @@ from Admin Console. Go to Settings -> Channels -> API.
 
 ```csharp
 
+using System;
 try {
     UserVoice.Client client = new UserVoice.Client(USERVOICE_SUBDOMAIN, API_KEY, API_SECRET);
 
     // Get users of a subdomain (requires trusted client, but no user)
     UserVoice.Collection users = client.GetCollection("/api/v1/users");
 
-    System.Console.WriteLine(string.Format("Subdomain \"{0}\" has {1} users.", USERVOICE_SUBDOMAIN, users.Length));
+    Console.WriteLine(string.Format("Subdomain \"{0}\" has {1} users.", USERVOICE_SUBDOMAIN, users.Length));
 
     foreach (var user in users) {
-	System.Console.WriteLine(string.Format("User: \"{0}\", Profile URL: {1}", (string)user["name"], (string)user["url"]));
+	Console.WriteLine(string.Format("User: \"{0}\", Profile URL: {1}", (string)user["name"], (string)user["url"]));
     }
 
     // Now, let's login as mailaddress@example.com, a regular user
@@ -73,7 +74,7 @@ try {
     // Example request #1: Get current user.
     var regularUser = regularAccessToken.Get("/api/v1/users/current")["user"];
 
-    System.Console.WriteLine(string.Format("User: \"{0}\", Profile URL: {1}", (string)regularUser["name"], (string)regularUser["url"]));
+    Console.WriteLine(string.Format("User: \"{0}\", Profile URL: {1}", (string)regularUser["name"], (string)regularUser["url"]));
 
     // Login as account owner
     UserVoice.Client ownerAccessToken = client.LoginAsOwner();
@@ -90,7 +91,7 @@ try {
         }
     })["forum"];
 
-    System.Console.WriteLine(string.Format("Forum \"{0}\" created! URL: {1}", (string)forum["name"], (string)forum["url"]));
+    Console.WriteLine(string.Format("Forum \"{0}\" created! URL: {1}", (string)forum["name"], (string)forum["url"]));
 } catch (UserVoice.Unauthorized e) {
     /* Thrown usually due to faulty tokens, untrusted client or if attempting
      * operations without Admin Privileges
