@@ -55,7 +55,6 @@ from Admin Console. Go to Settings -> Channels -> API.
 
 ```csharp
 
-using System;
 try {
     UserVoice.Client client = new UserVoice.Client(USERVOICE_SUBDOMAIN, API_KEY, API_SECRET);
 
