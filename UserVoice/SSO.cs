@@ -8,7 +8,8 @@ using Newtonsoft.Json.Linq;
 
 namespace UserVoice {
     public class SSO {
-        public static string GenerateToken(string subdomainName, string ssoKey, Object userAttributes) {
+        public static string GenerateToken(string subdomainName, string ssoKey, Object userAttributes, int valid_for=5*60) {
+            Console.WriteLine(valid_for);
             string initVector = "OpenSSL for Ruby"; // DO NOT CHANGE
 
             byte[] initVectorBytes = Encoding.UTF8.GetBytes(initVector);

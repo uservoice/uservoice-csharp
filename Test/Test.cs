@@ -15,18 +15,18 @@ namespace Test
         public Test() {
             foreach (MethodInfo method in this.GetType().GetMethods(BindingFlags.Public | BindingFlags.Instance)) {
                 if (method.Name.StartsWith("Should") || method.Name.StartsWith("Test") ) {
-                    this.GetType().InvokeMember(method.Name, BindingFlags.InvokeMethod | BindingFlags.Instance | BindingFlags.Public, null, this, null);
+                    try {
+                        this.GetType().InvokeMember(method.Name, BindingFlags.InvokeMethod | BindingFlags.Instance | BindingFlags.Public, null, this, null);
+                    } catch (System.Reflection.TargetInvocationException e) {
+                        Console.WriteLine(method.Name + " failed: " + e);
+                        errors++;
+                    }
                 }
             }
         }
         private static int assertionsFailed = 0;
         private static int assertionsTotal = 0;
-        public static int AssertionsFailed() {
-            return assertionsFailed;
-        }
-        public static int AssertionsTotal() {
-            return assertionsTotal;
-        }
+        private static int errors = 0;
         private static NameValueCollection config;
         protected static NameValueCollection Config {
             get {
@@ -82,7 +82,7 @@ namespace Test
         public static void Main() {
             new ClientTest();
             new SSOTest();
-            System.Console.WriteLine("Assertions failed: " + Test.AssertionsFailed() + " / " + Test.AssertionsTotal());
+            System.Console.WriteLine("Assertions failed: " + assertionsFailed + " / " + assertionsTotal + ", Errors: " + errors);
         }
     }
 }

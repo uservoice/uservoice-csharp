@@ -1,8 +1,15 @@
 namespace Test
 {
+    using System;
     using System.Linq;
 
     public class ClientTest: Test {
+
+string callbackURL = "http://localhost:3000/"; // your site
+string USERVOICE_SUBDOMAIN = Config["subdomain_name"];
+string API_KEY = Config["api_key"];
+string SSO_KEY = Config["sso_key"];
+string API_SECRET = Config["api_secret"];
 
         public void ShouldGetCurrentUserEmail() {
             UserVoice.Client client = new UserVoice.Client(Config["subdomain_name"], Config["api_key"], Config["api_secret"]);

@@ -19,32 +19,39 @@ namespace UserVoice
 
     public class Client
     {
-        private RestClient AccessToken;
-        private string SubdomainName;
-        private string ApiKey;
-        private string ApiSecret;
-        private string UservoiceDomain;
-        private string Callback;
-        private string Protocol;
+        private RestClient consumer;
+        private RestClient accessToken;
+        private string apiKey;
+        private string apiSecret;
+        private string uservoiceDomain;
+        private string protocol;
+        private string subdomainName;
+        private string callback;
         public string Token;
         public string Secret;
+        private Client requestToken = null;
 
-        public Client(string subdomainName, string apiKey, string apiSecret, string callback=null, string accessToken="", string accessTokenSecret="", string uservoiceDomain="uservoice.com", string protocol="https") {
-            SubdomainName= subdomainName;
-            ApiKey = apiKey;
-            ApiSecret = apiSecret;
-            UservoiceDomain = uservoiceDomain;
-            Protocol = protocol;
-            Callback = callback;
-            Token = accessToken;
-            Secret = accessTokenSecret;
-            AccessToken = new RestClient(protocol + "://" + subdomainName + "." + uservoiceDomain);
-
-            if (accessToken == "" && accessTokenSecret == "") {
-                AccessToken.Authenticator = OAuth1Authenticator.ForRequestToken(apiKey, apiSecret);
-            } else {
-                AccessToken.Authenticator = OAuth1Authenticator.ForAccessToken(apiKey, apiSecret, accessToken, accessTokenSecret);
+        public Client(string subdomainName, string apiKey, string apiSecret, string callback=null, string token=null, string secret=null, string uservoiceDomain="uservoice.com", string protocol="https") {
+            this.apiKey = apiKey;
+            this.apiSecret = apiSecret;
+            this.protocol = protocol;
+            this.subdomainName = subdomainName;
+            this.uservoiceDomain = uservoiceDomain;
+            this.callback = callback;
+            this.Token = token;
+            this.Secret = secret;
+            consumer = new RestClient(protocol + "://" + subdomainName + "." + uservoiceDomain);
+            consumer.Authenticator = OAuth1Authenticator.ForRequestToken(apiKey, apiSecret, callback);
+            if (token != null && secret != null) {
+                accessToken = new RestClient(protocol + "://" + subdomainName + "." + uservoiceDomain);
+                accessToken.Authenticator = OAuth1Authenticator.ForAccessToken(apiKey, apiSecret, token, secret);
             }
+        }
+        private RestClient getToken() {
+            if (accessToken != null) {
+                return accessToken;
+            }
+            return consumer;
         }
 
         public JToken Request(Method method, string path, Object body=null) {
@@ -53,12 +60,22 @@ namespace UserVoice
                 request.AddParameter("application/json", JsonConvert.SerializeObject(body), ParameterType.RequestBody);
             }
             request.AddHeader("Accept", "application/json");
-            var response = AccessToken.Execute(request);
+            var response = getToken().Execute(request);
 
             JToken result = null;
             try {
                 if (response.ContentType.StartsWith("application/json")) {
                     result = JObject.Parse(response.Content);
+                } else {
+                    result = new JObject();
+                    var values = HttpUtility.ParseQueryString(response.Content);
+                    if (null != values.AllKeys) {
+                        foreach (String k in values.AllKeys) {
+                            if (null != k) {
+                                result[k] = values[k];
+                            }
+                        }
+                    }
                 }
             } catch (Newtonsoft.Json.JsonReaderException) {
                 throw new ApplicationError("Invalid JSON received: " + response.Content);
@@ -80,22 +97,17 @@ namespace UserVoice
             return result;
         }
         public Client LoginWithAccessToken(string token, string secret) {
-            return new Client(SubdomainName, ApiKey, ApiSecret, Callback, token, secret, UservoiceDomain, Protocol);
+            return new Client(subdomainName, apiKey, apiSecret, callback, token, secret, uservoiceDomain, protocol);
         }
         public Client RequestToken(string callback = null) {
-            JObject parameters = new JObject();
-            if (Callback != null) {
-                parameters["oauth_callback"] = Callback;
-            } else if (callback != null) {
-                parameters["oauth_callback"] = callback;
-            } else {
-                parameters = null;
-            }
-            JToken result = Request(Method.POST, "/api/v1/oauth/request_token", parameters);
-            if (null == result || null == result["token"] || null == result["token"]["oauth_token"]) {
+            var request = new RestRequest("/oauth/request_token", Method.POST);
+            var response = consumer.Execute(request);
+            var result = HttpUtility.ParseQueryString(response.Content);
+
+            if (null == result || null == result["oauth_token"] || null == result["oauth_token_secret"]) {
                 throw new Unauthorized("Failed to get request token");
             }
-            return LoginWithAccessToken((string)result["token"]["oauth_token"], (string)result["token"]["oauth_token_secret"]);
+            return LoginWithAccessToken((string)result["oauth_token"], (string)result["oauth_token_secret"]);
         }
         public Client LoginAs(string email) {
             JObject parameters = new JObject();
@@ -110,6 +122,17 @@ namespace UserVoice
             parameters["request_token"] = RequestToken().Token;
             JToken result = Request(Method.POST, "/api/v1/users/login_as_owner", parameters);
             return LoginWithAccessToken((string)result["token"]["oauth_token"], (string)result["token"]["oauth_token_secret"]);
+        }
+        public string AuthorizeURL() {
+            requestToken = RequestToken();
+            return requestToken.getToken().BaseUrl + "/oauth/authorize?oauth_token=" + requestToken.Token;
+        }
+        public Client LoginWithVerifier(string verifier) {
+            var result = requestToken.Post("/oauth/access_token", new { oauth_verifier=verifier });
+            if (null == result || null == result["oauth_token"] || null == result["oauth_token_secret"]) {
+                throw new Unauthorized("Failed to get request token");
+            }
+            return LoginWithAccessToken((string)result["oauth_token"], (string)result["oauth_token_secret"]);
         }
 
         public JToken Get(string path) { return Request(Method.GET, path); }

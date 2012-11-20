@@ -120,15 +120,15 @@ UserVoice.Client client = new UserVoice.Client(USERVOICE_SUBDOMAIN, API_KEY, API
 
 // At this point you want to print/redirect to client.AuthorizeURL in your application.
 // Here we just output them as this is a command-line example.
-System.Console.WriteLine(string.Format("1. Go to {0} and click \"Allow access\".\n", client.AuthorizeURL()));
-System.Console.WriteLine("2. Then type the oauth_verifier which is passed as a GET parameter to the callback URL:\n");
+System.Console.WriteLine(string.Format("1. Go to {0} and click \"Allow access\".", client.AuthorizeURL()));
+System.Console.WriteLine("2. Then type the oauth_verifier which is passed as a GET parameter to the callback URL:");
 
 // In a web app we would get the oauth_verifier via a redirection to CALLBACK_URL.
 // In this command-line example we just read it from stdin:
-UserVoice.Client accessToken = client.LoginWithVerifier(readline());
+UserVoice.Client accessToken = client.LoginWithVerifier(Console.ReadLine());
 
 // All done. Now we can read the current user's email address:
-JToken user = accessToken.Get("/api/v1/users/current")["user"];
+var user = accessToken.Get("/api/v1/users/current")["user"];
 
 
 System.Console.WriteLine(string.Format("User logged in, Name: {0}, email: {1}", user["name"], user["email"]));
