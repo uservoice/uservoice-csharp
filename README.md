@@ -64,7 +64,7 @@ try {
     Console.WriteLine(string.Format("Subdomain \"{0}\" has {1} users.", USERVOICE_SUBDOMAIN, users.Count()));
 
     foreach (var user in users) {
-	Console.WriteLine(string.Format("User: \"{0}\", Profile URL: {1}", (string)user["name"], (string)user["url"]));
+        Console.WriteLine(string.Format("User: \"{0}\", Profile URL: {1}", (string)user["name"], (string)user["url"]));
     }
 
     // Now, let's login as mailaddress@example.com, a regular user
