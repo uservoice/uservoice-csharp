@@ -16,9 +16,15 @@ namespace Test
             foreach (MethodInfo method in this.GetType().GetMethods(BindingFlags.Public | BindingFlags.Instance)) {
                 if (method.Name.StartsWith("Should") || method.Name.StartsWith("Test") ) {
                     try {
+                        var failed = assertionsFailed;
                         this.GetType().InvokeMember(method.Name, BindingFlags.InvokeMethod | BindingFlags.Instance | BindingFlags.Public, null, this, null);
+                        if (failed > assertionsFailed) {
+                            Console.WriteLine(method.Name + " FAILED due to " + (failed - assertionsFailed) + " assertions.");
+                        } else {
+                            Console.WriteLine(method.Name + " passed.");
+                        }
                     } catch (System.Reflection.TargetInvocationException e) {
-                        Console.WriteLine(method.Name + " failed: " + e);
+                        Console.WriteLine(method.Name + " FAILED due to: " + e.InnerException);
                         errors++;
                     }
                 }
