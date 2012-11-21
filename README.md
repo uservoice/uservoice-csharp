@@ -59,9 +59,9 @@ try {
     UserVoice.Client client = new UserVoice.Client(USERVOICE_SUBDOMAIN, API_KEY, API_SECRET);
 
     // Get users of a subdomain (requires trusted client, but no user)
-    UserVoice.Collection users = client.GetCollection("/api/v1/users");
+    UserVoice.Collection users = client.LoginAsOwner().GetCollection("/api/v1/users");
 
-    Console.WriteLine(string.Format("Subdomain \"{0}\" has {1} users.", USERVOICE_SUBDOMAIN, users.Length));
+    Console.WriteLine(string.Format("Subdomain \"{0}\" has {1} users.", USERVOICE_SUBDOMAIN, users.Count()));
 
     foreach (var user in users) {
 	Console.WriteLine(string.Format("User: \"{0}\", Profile URL: {1}", (string)user["name"], (string)user["url"]));
