@@ -57,18 +57,21 @@ namespace UserVoice
         public JToken Request(Method method, string path, Object body=null) {
             //Console.WriteLine(method + " " + path + "\n" + body);
             var request = new RestRequest(path.Split('?').First(), method);
+            request.AddHeader("Accept", "application/json");
             if (body != null) {
+                //Console.WriteLine("BODY PARAMETER " + body.ToString());
                 request.AddParameter("application/json", JsonConvert.SerializeObject(body), ParameterType.RequestBody);
             }
-            var queryString = string.Join(string.Empty, path.Split('?').Skip(1));
-            var getParams = System.Web.HttpUtility.ParseQueryString(queryString);
-            if (null != getParams) {
-                foreach (string k in getParams.AllKeys) {
-                    //Console.WriteLine("GET PARAMTER " + k + "=" + getParams[k]);
-                    request.AddParameter(k, getParams[k], ParameterType.UrlSegment);
+            if (body == null) {
+                var queryString = string.Join(string.Empty, path.Split('?').Skip(1));
+                var getParams = System.Web.HttpUtility.ParseQueryString(queryString);
+                if (null != getParams) {
+                    foreach (string k in getParams.AllKeys) {
+                        //Console.WriteLine("GET PARAMTER " + k + "=" + getParams[k]);
+                        request.AddParameter(k, getParams[k], ParameterType.GetOrPost);
+                    }
                 }
             }
-            request.AddHeader("Accept", "application/json");
             var response = getToken().Execute(request);
 
             JToken result = null;

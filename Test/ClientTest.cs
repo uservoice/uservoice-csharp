@@ -42,13 +42,31 @@ string API_SECRET = Config["api_secret"];
             UserVoice.Collection users = client.LoginAsOwner().GetCollection("/api/v1/users", 3);
             AssertEqual(3, users.Count());
         }
+        public void ShouldThrowExceptionOnOutOfRangeReference() {
+            var k = false;
+            try {
+                UserVoice.Client client = new UserVoice.Client(USERVOICE_SUBDOMAIN, API_KEY, API_SECRET);
+                UserVoice.Collection users = client.LoginAsOwner().GetCollection("/api/v1/users", 3);
+                Console.WriteLine("Getting user out of range FAILED: " + users[3]);
+            } catch (IndexOutOfRangeException e) {
+                k = true;
+            }
+            AssertTrue(k);
+        }
         public void ShouldGetMoreThan10Users() {
             UserVoice.Client client = new UserVoice.Client(USERVOICE_SUBDOMAIN, API_KEY, API_SECRET);
             UserVoice.Collection users = client.LoginAsOwner().GetCollection("/api/v1/users");
             foreach (var k in users) {
-                Console.WriteLine("User: " + k);
+                //Console.WriteLine("User: " + k);
             }
             AssertTrue(users.Count() > 10);
+        }
+        public void ShouldForLoopMoreThan10Users() {
+            UserVoice.Client client = new UserVoice.Client(USERVOICE_SUBDOMAIN, API_KEY, API_SECRET);
+            UserVoice.Collection users = client.LoginAsOwner().GetCollection("/api/v1/users");
+            for (int i = 0; i < users.Count(); i++) {
+                //Console.WriteLine("User: " + users[i]);
+            }
         }
     }
 }

@@ -23,7 +23,7 @@ namespace UserVoice
             this.perPage = Math.Min(this.limit, PER_PAGE);
         }
         public int Count {
-            get { 
+            get {
                 if (this.responseData == null && this[0] != null) {
                     /* Avoiding warning with overloaded this[int] */
                 }
@@ -31,15 +31,16 @@ namespace UserVoice
             }
         }
 
-        public JToken this[int i] { 
-            get { 
-                if (i == 0 || (i > 0 && i < this.Count) ) {
+        public JToken this[int i] {
+            get {
+                //Console.WriteLine(string.Format("this[{0}]", i));
+                if (i == 0 || (i > 0 && i < this.Count()) ) {
                     return LoadPage((int)(i/(float)(PER_PAGE)) + 1)[i % PER_PAGE];
                 } else {
                     throw new IndexOutOfRangeException();
                 }
-            } 
-            set { throw new NotSupportedException("Read-only"); } 
+            }
+            set { throw new NotSupportedException("Read-only"); }
         }
         private JToken[] LoadPage(int i) {
             if (!pages.ContainsKey(i)) {
@@ -62,8 +63,14 @@ namespace UserVoice
             }
             return pages[i];
         }
-        public IEnumerator<JToken> GetEnumerator() { throw new NotSupportedException("GetEnumerator not supported"); }
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() { throw new NotSupportedException("Read-only"); }
+        public IEnumerator<JToken> GetEnumerator() {
+            for (int i = 0; i < this.Count(); i++) {
+                yield return this[i];
+            }
+        }
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() {
+            return GetEnumerator();
+        }
         public int IndexOf(Newtonsoft.Json.Linq.JToken o) { return 0; }
         public void RemoveAt(int index) { throw new NotSupportedException("Read-only"); }
         public void Clear() { throw new NotSupportedException("Read-only"); }
