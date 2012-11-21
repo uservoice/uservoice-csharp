@@ -73,7 +73,8 @@ try {
     // Example request #1: Get current user.
     var regularUser = regularAccessToken.Get("/api/v1/users/current")["user"];
 
-    Console.WriteLine(string.Format("User: \"{0}\", Profile URL: {1}", (string)regularUser["name"], (string)regularUser["url"]));
+    Console.WriteLine(string.Format("User: \"{0}\", Profile URL: {1}", (string)regularUser["name"], 
+                                                                       (string)regularUser["url"]));
 
     // Login as account owner
     UserVoice.Client ownerAccessToken = client.LoginAsOwner();
@@ -90,7 +91,8 @@ try {
         }
     })["forum"];
 
-    Console.WriteLine(string.Format("Forum \"{0}\" created! URL: {1}", (string)forum["name"], (string)forum["url"]));
+    Console.WriteLine(string.Format("Forum \"{0}\" created! URL: {1}", (string)forum["name"],
+                                                                       (string)forum["url"]));
 } catch (UserVoice.Unauthorized e) {
     /* Thrown usually due to faulty tokens, untrusted client or if attempting
      * operations without Admin Privileges
@@ -120,7 +122,7 @@ UserVoice.Client client = new UserVoice.Client(USERVOICE_SUBDOMAIN, API_KEY, API
 // At this point you want to print/redirect to client.AuthorizeURL in your application.
 // Here we just output them as this is a command-line example.
 System.Console.WriteLine(string.Format("1. Go to {0} and click \"Allow access\".", client.AuthorizeURL()));
-System.Console.WriteLine("2. Then type the oauth_verifier which is passed as a GET parameter to the callback URL:");
+System.Console.WriteLine("2. Then type the oauth_verifier which was passed to the callback URL:");
 
 // In a web app we would get the oauth_verifier via a redirection to CALLBACK_URL.
 // In this command-line example we just read it from stdin:
