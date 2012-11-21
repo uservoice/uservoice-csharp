@@ -12,6 +12,13 @@ namespace Test
 
 
     public abstract class Test {
+
+        protected string callbackURL = "http://localhost:3000/"; // your site
+        protected string USERVOICE_SUBDOMAIN = Config["subdomain_name"];
+        protected string SSO_KEY = Config["sso_key"];
+        protected string API_KEY = Config["api_key"];
+        protected string API_SECRET = Config["api_secret"];
+
         public Test() {
             foreach (MethodInfo method in this.GetType().GetMethods(BindingFlags.Public | BindingFlags.Instance)) {
                 if (method.Name.StartsWith("Should") || method.Name.StartsWith("Test") ) {
