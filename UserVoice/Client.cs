@@ -55,9 +55,18 @@ namespace UserVoice
         }
 
         public JToken Request(Method method, string path, Object body=null) {
-            var request = new RestRequest(path, method);
+            //Console.WriteLine(method + " " + path + "\n" + body);
+            var request = new RestRequest(path.Split('?').First(), method);
             if (body != null) {
                 request.AddParameter("application/json", JsonConvert.SerializeObject(body), ParameterType.RequestBody);
+            }
+            var queryString = string.Join(string.Empty, path.Split('?').Skip(1));
+            var getParams = System.Web.HttpUtility.ParseQueryString(queryString);
+            if (null != getParams) {
+                foreach (string k in getParams.AllKeys) {
+                    //Console.WriteLine("GET PARAMTER " + k + "=" + getParams[k]);
+                    request.AddParameter(k, getParams[k], ParameterType.UrlSegment);
+                }
             }
             request.AddHeader("Accept", "application/json");
             var response = getToken().Execute(request);
@@ -134,6 +143,7 @@ namespace UserVoice
             }
             return LoginWithAccessToken((string)result["oauth_token"], (string)result["oauth_token_secret"]);
         }
+        public UserVoice.Collection GetCollection(string path, int? limit=null) { return new UserVoice.Collection(this, path, limit); }
 
         public JToken Get(string path) { return Request(Method.GET, path); }
         public JToken Delete(string path) { return Request(Method.DELETE, path); }

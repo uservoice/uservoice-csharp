@@ -23,7 +23,7 @@ namespace UserVoice {
             Dictionary<string, dynamic> dict = JsonConvert.DeserializeObject<Dictionary<string, dynamic> >(jsonText);
             if (!dict.ContainsKey("expires")) {
                 dict["expires"] = DateTime.UtcNow.AddSeconds(valid_for).ToString("u");
-                Console.WriteLine("Setting expires " + dict["expires"]);
+                //Console.WriteLine("Setting expires " + dict["expires"]);
             }
 
             byte[] textBytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(dict));

@@ -37,10 +37,18 @@ string API_SECRET = Config["api_secret"];
                 .LoginWithAccessToken(userToken.Token, userToken.Secret);
             AssertEqual((string)copiedToken.Get("/api/v1/users/current")["user"]["email"], email);
         }
-        public void ShouldDo () {
+        public void ShouldGetOnly3Users() {
             UserVoice.Client client = new UserVoice.Client(USERVOICE_SUBDOMAIN, API_KEY, API_SECRET);
-            UserVoice.Collection users = client.GetCollection("/api/v1/users");
-            Console.WriteLine(string.Format("Subdomain \"{0}\" has {1} users.", USERVOICE_SUBDOMAIN, users.Count));
+            UserVoice.Collection users = client.LoginAsOwner().GetCollection("/api/v1/users", 3);
+            AssertEqual(3, users.Count());
+        }
+        public void ShouldGetMoreThan10Users() {
+            UserVoice.Client client = new UserVoice.Client(USERVOICE_SUBDOMAIN, API_KEY, API_SECRET);
+            UserVoice.Collection users = client.LoginAsOwner().GetCollection("/api/v1/users");
+            foreach (var k in users) {
+                Console.WriteLine("User: " + k);
+            }
+            AssertTrue(users.Count() > 10);
         }
     }
 }
