@@ -13,7 +13,9 @@ namespace Test
 
     public abstract class Test {
 
-        protected string callbackURL = "http://localhost:3000/"; // your site
+        protected string CALLBACK = "http://localhost:3000/"; // your site
+        protected string PROTOCOL = Config["protocol"];
+        protected string USERVOICE_DOMAIN = Config["uservoice_domain"];
         protected string USERVOICE_SUBDOMAIN = Config["subdomain_name"];
         protected string SSO_KEY = Config["sso_key"];
         protected string API_KEY = Config["api_key"];
@@ -48,7 +50,7 @@ namespace Test
                     config = new NameValueCollection();
                     System.IO.StreamReader reader = new System.IO.StreamReader("Test/config.yml");
                     while ((line = reader.ReadLine()) != null) {
-                        string [] substrings = Regex.Split(line.Split('#')[0], ": *");
+                        string [] substrings = Regex.Split(line.Split('#')[0], ": +");
                         if (substrings.Length == 2) {
                             config[substrings[0]] = substrings[1];
                         }

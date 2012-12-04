@@ -31,19 +31,21 @@ namespace UserVoice
         public string Secret;
         private Client requestToken = null;
 
-        public Client(string subdomainName, string apiKey, string apiSecret, string callback=null, string token=null, string secret=null, string uservoiceDomain="uservoice.com", string protocol="https") {
+        public Client(string subdomainName, string apiKey, string apiSecret=null, string callback=null, string token=null, string secret=null, string uservoiceDomain=null, string protocol=null) {
+            this.protocol = protocol ?? "https";
+            this.uservoiceDomain = uservoiceDomain ?? "uservoice.com";
             this.apiKey = apiKey;
             this.apiSecret = apiSecret;
-            this.protocol = protocol;
             this.subdomainName = subdomainName;
-            this.uservoiceDomain = uservoiceDomain;
             this.callback = callback;
             this.Token = token;
             this.Secret = secret;
-            consumer = new RestClient(protocol + "://" + subdomainName + "." + uservoiceDomain);
-            consumer.Authenticator = OAuth1Authenticator.ForRequestToken(apiKey, apiSecret, callback);
+            consumer = new RestClient(this.protocol + "://" + this.subdomainName + "." + this.uservoiceDomain);
+            if (apiSecret != null) {
+                consumer.Authenticator = OAuth1Authenticator.ForRequestToken(apiKey, apiSecret, callback);
+            }
             if (token != null && secret != null) {
-                accessToken = new RestClient(protocol + "://" + subdomainName + "." + uservoiceDomain);
+                accessToken = new RestClient(this.protocol + "://" + this.subdomainName + "." + this.uservoiceDomain);
                 accessToken.Authenticator = OAuth1Authenticator.ForAccessToken(apiKey, apiSecret, token, secret);
             }
         }
@@ -71,6 +73,9 @@ namespace UserVoice
                         request.AddParameter(k, getParams[k], ParameterType.GetOrPost);
                     }
                 }
+            }
+            if (apiSecret == null) {
+                request.AddParameter("client", apiKey, ParameterType.GetOrPost);
             }
             var response = getToken().Execute(request);
 
