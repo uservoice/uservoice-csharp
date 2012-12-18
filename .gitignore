@@ -11,3 +11,4 @@ TestResults
 *.sw?
 /config.yml
 
+*.suo
