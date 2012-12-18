@@ -1,7 +1,12 @@
 TestResults
-*.sw?
 *.csproj.user
 /bin
 /obj
 /packages
+*.nupkg
+*.xml
+*.dll
+*.exe
+/**/*.txt
+*.sw?
 /Test/config.yml
