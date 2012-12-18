@@ -5,8 +5,10 @@ test: build_test_suite
 
 build_test_suite: TestSuite.exe
 
-TestSuite.exe: UserVoice/Client.cs UserVoice/Collection.cs UserVoice/SSO.cs Test/Test.cs Test/ClientTest.cs Test/SSOTest.cs
-	dmcs $(LIBS) UserVoice/Client.cs UserVoice/Collection.cs UserVoice/SSO.cs Test/Test.cs Test/ClientTest.cs Test/SSOTest.cs -out:TestSuite.exe
+UserVoice.dll: UserVoice/Client.cs UserVoice/Collection.cs UserVoice/SSO.cs
+	dmcs $(LIBS) UserVoice/Client.cs UserVoice/Collection.cs UserVoice/SSO.cs -t:library -out:UserVoice.dll
+TestSuite.exe: UserVoice.dll Test/Test.cs Test/ClientTest.cs Test/SSOTest.cs
+	dmcs $(LIBS) -r:UserVoice.dll Test/Test.cs Test/ClientTest.cs Test/SSOTest.cs -out:TestSuite.exe
 lib: packages.config
 	nuget install packages.config && ln -s Newtonsoft.Json.4.5.10/lib/net40/Newtonsoft.Json.dll && ln -s RestSharp.104.1/lib/net4/RestSharp.dll
 
