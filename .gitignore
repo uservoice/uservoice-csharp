@@ -9,4 +9,5 @@ TestResults
 *.exe
 /**/*.txt
 *.sw?
-/Test/config.yml
+/config.yml
+
