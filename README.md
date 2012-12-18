@@ -7,10 +7,23 @@ This library allows you to easily:
 Installation
 ============
 
-Run the following command to install uservoice from NuGet. In Visual Studio, you need the NuGet add-on.
+Visual Studio Project
+---------------------
+# Go to TOOLS -> Library Package Manager -> Manage NuGet Packages.
+# In the opening dialog, select Online from the left menu and click All.
+# Search for UserVoice and press enter.
+# Select the one with "C# library fro UserVoice API Connections"
+
+or Just type ``Install-Package UserVoice`` in Nuget Console of Visual Studio.
+
+Command line (e.g. Mono)
+------------------------
+
+Run the following command to install uservoice from NuGet in the command line.
 ```sh
 nuget install uservoice
 ```
+
 Now you should be good to go!
 
 Examples
