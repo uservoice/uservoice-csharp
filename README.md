@@ -9,10 +9,10 @@ Installation
 
 Visual Studio Project
 ---------------------
-# Go to TOOLS -> Library Package Manager -> Manage NuGet Packages.
-# In the opening dialog, select Online from the left menu and click All.
-# Search for UserVoice and press enter.
-# Select the one with "C# library fro UserVoice API Connections"
+1. Go to TOOLS -> Library Package Manager -> Manage NuGet Packages.
+1. In the opening dialog, select Online from the left menu and click All.
+1. Search for UserVoice and press enter.
+1. Select the one with "C# library fro UserVoice API Connections"
 
 or Just type ``Install-Package UserVoice`` in Nuget Console of Visual Studio.
 
