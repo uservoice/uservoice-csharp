@@ -48,7 +48,7 @@ namespace Test
                 if (config == null)  {
                     string line;
                     config = new NameValueCollection();
-                    System.IO.StreamReader reader = new System.IO.StreamReader("Test/config.yml");
+                    System.IO.StreamReader reader = new System.IO.StreamReader("config.yml");
                     while ((line = reader.ReadLine()) != null) {
                         string [] substrings = Regex.Split(line.Split('#')[0], ": +");
                         if (substrings.Length == 2) {

@@ -3,11 +3,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{59156CFF-D91E-4F76-9CAA-EC04500CD8BB}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{B778D771-A971-4705-82B3-911001B5F124}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>UserVoice</RootNamespace>
-    <AssemblyName>UserVoice</AssemblyName>
+    <RootNamespace>UserVoice.Test</RootNamespace>
+    <AssemblyName>UserVoice.Test</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -39,10 +39,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\UserVoice\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="RestSharp">
-      <HintPath>packages\RestSharp.104.1\lib\net4\RestSharp.dll</HintPath>
+      <HintPath>..\UserVoice\packages\RestSharp.104.1\lib\net4\RestSharp.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Web" />
@@ -60,20 +60,19 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="UserVoice\Client.cs" />
-    <Compile Include="UserVoice\Collection.cs" />
-    <Compile Include="UserVoice\SSO.cs" />
+    <Compile Include="UserVoice.Test\ClientTest.cs" />
+    <Compile Include="UserVoice.Test\SSOTest.cs" />
+    <Compile Include="UserVoice.Test\Test.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include=".gitignore" />
-    <Content Include="readme.txt" />
+    <ProjectReference Include="UserVoice.csproj">
+      <Project>{59156cff-d91e-4f76-9caa-ec04500cd8bb}</Project>
+      <Name>UserVoice</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Makefile" />
     <None Include="packages.config" />
-    <None Include="README.md" />
-    <None Include="UserVoice.nuspec" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
