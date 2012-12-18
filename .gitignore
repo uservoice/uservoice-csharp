@@ -1,0 +1,7 @@
+TestResults
+*.sw?
+*.csproj.user
+/bin
+/obj
+/packages
+/Test/config.yml
