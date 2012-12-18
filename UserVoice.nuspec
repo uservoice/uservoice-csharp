@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>UserVoice</id>
-    <version>0.0.1</version>
+    <version>0.0.2</version>
     <authors>Raimo Tuisku</authors>
     <owners>UserVoice</owners>
     <licenseUrl>http://github.com/uservoice/uservoice-csharp/MIT-LICENCE</licenseUrl>
@@ -17,5 +17,7 @@
       <dependency id="RestSharp" version="104.1" />
     </dependencies>
   </metadata>
-  <files />
+  <files>
+    <file src="UserVoice.dll" target="lib/net45" />
+  </files>
 </package>
