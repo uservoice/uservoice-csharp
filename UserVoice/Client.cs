@@ -12,10 +12,10 @@ using RestSharp.Contrib;
 
 namespace UserVoice
 {
-    class APIError: Exception { public APIError(string msg): base(msg) {} }
-    class Unauthorized: APIError { public Unauthorized(string msg): base(msg) {} }
-    class NotFound: APIError { public NotFound(string msg): base(msg) {} }
-    class ApplicationError: APIError { public ApplicationError(string msg): base(msg) {} }
+    public class APIError: Exception { public APIError(string msg): base(msg) {} }
+    public class Unauthorized: APIError { public Unauthorized(string msg): base(msg) {} }
+    public class NotFound: APIError { public NotFound(string msg): base(msg) {} }
+    public class ApplicationError: APIError { public ApplicationError(string msg): base(msg) {} }
 
     public class Client
     {
