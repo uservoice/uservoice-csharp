@@ -19,6 +19,7 @@ namespace UserVoice
 
     public class Client
     {
+        public const string CLIENT_VERSION = "0.0.3";
         private RestClient consumer;
         private RestClient accessToken;
         private string apiKey;
@@ -60,6 +61,7 @@ namespace UserVoice
             //Console.WriteLine(method + " " + path + "\n" + body);
             var request = new RestRequest(path.Split('?').First(), method);
             request.AddHeader("Accept", "application/json");
+            request.AddHeader("API-Client", string.Format("uservoice-csharp-{0}", CLIENT_VERSION));
             if (body != null) {
                 //Console.WriteLine("BODY PARAMETER " + body.ToString());
                 request.AddParameter("application/json", JsonConvert.SerializeObject(body), ParameterType.RequestBody);
