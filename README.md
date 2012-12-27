@@ -38,9 +38,9 @@ Prerequisites:
 ```csharp
 // Suppose your UserVoice site is at http://uservoice-subdomain.uservoice.com/
 const string USERVOICE_SUBDOMAIN = "uservoice-subdomain";
-const string SSO_KEY = "982c88f2df72572859e8e23423eg87ed"; // Admin Console -> Settings -> General -> User Authentication
-
-// Define an API client at: Admin Console -> Settings -> Channels -> API
+// Get the SSO KEY from Admin Console -> Settings -> General -> User Authentication
+const string SSO_KEY = "982c88f2df72572859e8e23423eg87ed";
+// Define an API client at Admin Console -> Settings -> Channels -> API
 const string API_KEY = "oQt2BaunWNuainc8BvZpAm";
 const string API_SECRET = "3yQMSoXBpAwuK3nYHR0wpY6opE341inL9a2HynGF2";
 
