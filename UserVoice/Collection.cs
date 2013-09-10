@@ -24,8 +24,9 @@ namespace UserVoice
         }
         public int Count {
             get {
-                if (this.responseData == null && this[0] != null) {
-                    /* Avoiding warning with overloaded this[int] */
+                if (this.responseData == null) {
+                    //Load the first page
+                    LoadPage(1);
                 }
                 return Math.Min((int)this.responseData["total_records"], this.limit);
             }
