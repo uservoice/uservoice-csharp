@@ -19,7 +19,7 @@ namespace UserVoice
 
     public class Client
     {
-        public const string CLIENT_VERSION = "0.0.3";
+        public const string CLIENT_VERSION = "0.0.4";
         private RestClient consumer;
         private RestClient accessToken;
         private string apiKey;
