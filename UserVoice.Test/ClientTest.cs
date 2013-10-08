@@ -43,6 +43,11 @@ namespace Test
                 .LoginWithAccessToken(userToken.Token, userToken.Secret);
             AssertEqual((string)copiedToken.Get("/api/v1/users/current")["user"]["email"], email);
         }
+        public void ShouldGetNoUsers() {
+            UserVoice.Client client = getSignedClient();
+            UserVoice.Collection users = client.LoginAsOwner().GetCollection("/api/v1/users/search?query=from:nonexistant@example.com");
+            AssertEqual(0, users.Count());
+        }
         public void ShouldGetOnly3Users() {
             UserVoice.Client client = getSignedClient();
             UserVoice.Collection users = client.LoginAsOwner().GetCollection("/api/v1/users", 3);
