@@ -32,7 +32,7 @@ namespace UserVoice
         public string Secret;
         private Client requestToken = null;
 
-        public Client(string subdomainName, string apiKey, string apiSecret=null, string callback=null, string token=null, string secret=null, string uservoiceDomain=null, string protocol=null) {
+        public Client(string subdomainName, string apiKey, string apiSecret=null, string callback=null, string token=null, string secret=null, string uservoiceDomain=null, string protocol=null, IWebProxy proxy = null) {
             this.protocol = protocol ?? "https";
             this.uservoiceDomain = uservoiceDomain ?? "uservoice.com";
             this.apiKey = apiKey;
@@ -44,10 +44,12 @@ namespace UserVoice
             consumer = new RestClient(this.protocol + "://" + this.subdomainName + "." + this.uservoiceDomain);
             if (apiSecret != null) {
                 consumer.Authenticator = OAuth1Authenticator.ForRequestToken(apiKey, apiSecret, callback);
+                consumer.Proxy = proxy;
             }
             if (token != null && secret != null) {
                 accessToken = new RestClient(this.protocol + "://" + this.subdomainName + "." + this.uservoiceDomain);
                 accessToken.Authenticator = OAuth1Authenticator.ForAccessToken(apiKey, apiSecret, token, secret);
+                accessToken.Proxy = proxy;
             }
         }
         private RestClient getToken() {
