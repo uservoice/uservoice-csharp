@@ -55,7 +55,8 @@ Generating the SSO token from SSO key and given uservoice subdomain can be done 
 ```csharp
     string ssoToken = UserVoice.SSO.GenerateToken(USERVOICE_SUBDOMAIN, SSO_KEY, new {
         display_name = "John Doe",
-        email = "john.doe@example.com"
+        email = "john.doe@example.com",
+        guid = "12345"
     }, 5*60); // the token will be valid for 5 minutes (5*60 seconds) by default
 
     System.Console.WriteLine(string.Format("https://{0}.uservoice.com/?sso={1}", USERVOICE_SUBDOMAIN, ssoToken));
