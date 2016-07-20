@@ -3,14 +3,14 @@
   <metadata>
     <id>UserVoice</id>
     <version>0.0.5</version>
-    <authors>Raimo Tuisku</authors>
+    <authors>UserVoice Inc.</authors>
     <owners>UserVoice</owners>
-    <licenseUrl>http://github.com/uservoice/uservoice-csharp/MIT-LICENCE</licenseUrl>
+    <licenseUrl>https://raw.githubusercontent.com/uservoice/uservoice-csharp/master/LICENSE</licenseUrl>
     <projectUrl>http://github.com/uservoice/uservoice-csharp</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>C# library for UserVoice API Connections</description>
     <releaseNotes>Initial version</releaseNotes>
-    <copyright>Copyright 2012</copyright>
+    <copyright>Copyright 2016</copyright>
     <tags>UserVoice SSO API</tags>
     <dependencies>
       <dependency id="Newtonsoft.Json" version="6.0.8" />
