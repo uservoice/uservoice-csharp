@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RestSharp;
 using RestSharp.Authenticators;
-using RestSharp.Contrib;
+using RestSharp.Extensions.MonoHttp;
 
 namespace UserVoice
 {
@@ -19,7 +19,7 @@ namespace UserVoice
 
     public class Client
     {
-        public const string CLIENT_VERSION = "0.0.4";
+        public const string CLIENT_VERSION = "0.0.5";
         private RestClient consumer;
         private RestClient accessToken;
         private string apiKey;
